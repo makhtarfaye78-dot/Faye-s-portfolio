@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aperçu fusion — Hero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quantico:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #EDECE9;
+    --bg-panel: #E3E1DD;
+    --ink: #23221F;
+    --muted: #6b6862;
+    --accent: #A79C86;      /* muted warm stone, replaces the aggressive cyan */
+    --accent-dark: #8c8069;
+    --accent-hover: #b6ab95;
+  }
+  * { box-sizing: border-box; }
+  html, body { height:100%; }
+  html { scroll-snap-type: y mandatory; scroll-behavior:smooth; }
+  body { margin:0; background: var(--bg); font-family: 'Quantico', 'Arial Narrow', sans-serif; color: var(--ink); overflow-x:hidden; }
+  a { color: inherit; text-decoration:none; }
+  section.hero, section.about, section.section { scroll-snap-align:start; scroll-snap-stop:always; }
+
+  .scroll-cue { position:absolute; left:50%; bottom:28px; transform:translateX(-50%); z-index:5;
+    display:flex; flex-direction:column; align-items:center; gap:8px; color: var(--muted);
+    font-size:11px; letter-spacing:0.2em; text-transform:uppercase; }
+  .scroll-cue .line { width:1px; height:34px; background: rgba(35,34,31,0.25); position:relative; overflow:hidden; }
+  .scroll-cue .line::after { content:""; position:absolute; top:-100%; left:0; width:100%; height:100%;
+    background: var(--ink); animation: scrollDown 1.6s ease-in-out infinite; }
+  @keyframes scrollDown { 0%{ top:-100%; } 60%{ top:100%; } 100%{ top:100%; } }
+
+  .hero { position:relative; min-height:100svh; overflow:hidden; background: var(--bg); }
+
+  .bg-video { position:absolute; top:0; pointer-events:none; z-index:0; object-fit:contain; height:auto; }
+  .hero .bg-video { right:-20%; width:99%; opacity:0.9; }
+  @media (max-width:700px) { .hero .bg-video { right:auto; left:-12%; width:119%; } }
+
+  .stage-3d { position:absolute; top:0; right:-6%; width:62%; height:100%; z-index:1; }
+  .stage-3d canvas { display:block; width:100%; height:100%; }
+
+  .scrim { position:absolute; inset:0; z-index:1; pointer-events:none;
+    background: linear-gradient(90deg, var(--bg) 0%, var(--bg) 55%, rgba(237,236,233,0.85) 78%, rgba(237,236,233,0) 100%); }
+  @media (max-width:700px) { .scrim { display:none; } }
+
+  nav.navbar { position:relative; z-index:5; display:flex; flex-wrap:wrap; align-items:center; gap:clamp(20px,5vw,56px);
+    padding: clamp(20px,3vw,38px) clamp(20px,4vw,48px) 0; }
+  .logo { display:flex; align-items:center; gap:12px; }
+  .logo-mark { width:38px; height:38px; border-radius:50%; background: var(--ink); display:flex; align-items:center; justify-content:center; }
+  .logo-mark span { width:20px; height:8px; border-radius:999px; background:#fff; transform:rotate(-25deg); display:block; }
+  .logo-word { font-size:clamp(22px,5vw,30px); font-weight:400; color: var(--ink); letter-spacing:-0.5px; text-transform:lowercase; }
+  .nav-links { display:flex; gap:34px; font-weight:700; font-size:clamp(12px,2.4vw,15px); letter-spacing:0.06em; color: var(--muted); white-space:nowrap; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-spacer { flex:1; }
+  .btn-contact-nav { display:inline-flex; align-items:center; gap:10px; background:transparent; color: var(--ink); text-transform:uppercase;
+    letter-spacing:0.14em; padding:14px 26px; font-size:13px; font-weight:700; border:1px solid rgba(35,34,31,0.25);
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px)); transition: background .2s ease; }
+  .btn-contact-nav:hover { background: rgba(35,34,31,0.06); }
+  .btn-contact-nav svg { width:17px; height:13px; }
+
+  .headline-wrap { position:relative; z-index:5; padding: min(clamp(40px,9vw,120px),9vh) 20px min(clamp(24px,4vw,44px),5vh) clamp(20px,9vw,118px); }
+  h1.staircase { margin:0; text-transform:uppercase; font-weight:700; line-height:0.98; letter-spacing:0.01em;
+    font-size: min(clamp(34px,7.6vw,80px), 9.2vh); }
+  h1.staircase div { }
+  h1.staircase .indent { margin-left: min(238px, 28vw); }
+  h1.staircase .accent { color: var(--accent-dark); }
+
+  .cta { display:inline-flex; align-items:center; gap:14px; margin-top: min(clamp(36px,6vw,80px),7vh);
+    margin-left: calc(clamp(20px,9vw,118px) - clamp(20px,9vw,118px) + min(238px,28vw));
+    background: var(--accent); border:1px solid var(--accent-dark); color:#22201c; text-transform:uppercase; font-weight:700;
+    letter-spacing:0.14em; padding:18px 34px; font-size:clamp(13px,2.2vw,16px);
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+    box-shadow: 0 0 0 1px rgba(167,156,134,0.35), 0 10px 30px -12px rgba(140,128,105,0.55);
+    transition: background .2s ease, box-shadow .2s ease; }
+  .cta:hover { background: var(--accent-hover); box-shadow: 0 0 0 1px rgba(167,156,134,.5), 0 14px 34px -10px rgba(140,128,105,.7); }
+  .cta::after { content:""; display:inline-block; width:22px; height:1px; background:#22201c; }
+
+  @media (max-width: 700px) {
+    .stage-3d { right:-30%; width:100%; opacity:.9; }
+    .headline-wrap { margin-top:300px; padding:0 20px 28px 20px; }
+    h1.staircase { font-size: clamp(34px,10vw,56px); }
+    .cta { margin-left:0; }
+    .nav-links, .btn-contact-nav { display:none; }
+    .burger { display:flex; }
+  }
+
+  .burger { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:8px; z-index:6; }
+  .burger span { width:22px; height:2px; background: var(--ink); transition: transform .3s ease, opacity .3s ease; }
+  .burger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+  .burger.open span:nth-child(2) { opacity:0; }
+  .burger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+  .mobile-menu { position:fixed; inset:0; background: rgba(237,236,233,0.97); backdrop-filter: blur(6px);
+    z-index:20; display:flex; flex-direction:column; justify-content:center; gap:18px; padding:0 32px;
+    opacity:0; pointer-events:none; transition: opacity .3s ease; }
+  .mobile-menu.open { opacity:1; pointer-events:auto; }
+  .mobile-menu a { font-size:26px; font-weight:700; color: var(--ink); text-transform:uppercase; }
+
+  /* ---- About section ---- */
+  .about { position:relative; min-height:100svh; display:flex; flex-wrap:wrap; align-items:center; gap:40px;
+    background: linear-gradient(180deg, var(--bg) 0%, #F1EFEA 18%, #F1EFEA 100%);
+    padding: clamp(60px,10vw,140px) 0 clamp(30px,5vw,70px) clamp(20px,9vw,118px); }
+  .about-left { flex:1 1 420px; min-width:300px; }
+  h2.staircase { margin:0; text-transform:uppercase; font-weight:700; line-height:0.98; letter-spacing:0.01em;
+    font-size: clamp(34px,6.5vw,72px); }
+  h2.staircase .indent { margin-left: min(160px,18vw); color: var(--accent-dark); }
+  .about-text { max-width:520px; margin: 32px 0 0 min(160px,18vw); font-size:clamp(14px,1.6vw,17px);
+    line-height:1.7; color: var(--muted); }
+  .btn-learn { display:inline-flex; align-items:center; gap:14px; margin: 36px 0 0 min(160px,18vw);
+    background: var(--accent); border:1px solid var(--accent-dark); color:#22201c; text-transform:uppercase; font-weight:700;
+    letter-spacing:0.14em; padding:18px 34px; font-size:clamp(13px,2.2vw,16px);
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+    box-shadow: 0 0 0 1px rgba(167,156,134,0.35), 0 10px 30px -12px rgba(140,128,105,0.55);
+    transition: background .2s ease; }
+  .btn-learn:hover { background: var(--accent-hover); }
+  .btn-learn::after { content:""; display:inline-block; width:22px; height:1px; background:#22201c; }
+
+  .about-right { flex:1 1 360px; min-width:280px; display:flex; justify-content:flex-end; position:relative; }
+  .about-media { position:relative; width:100%; max-width:644px; }
+  .about-media video { width:100%; height:auto; display:block; }
+  .about-tint { position:absolute; inset:0; background: var(--accent); mix-blend-mode:hue; pointer-events:none; z-index:1; }
+
+  /* ---- shared section shell ---- */
+  .section { position:relative; min-height:100svh; display:flex; flex-direction:column; justify-content:center;
+    padding: clamp(60px,8vw,100px) clamp(20px,9vw,118px); background: #F1EFEA; }
+  .section:nth-of-type(even) { background: var(--bg-panel); }
+  .section h2.staircase { margin-bottom:clamp(30px,5vw,56px); }
+  .section h2.staircase .indent { margin-left:0; }
+
+  .pill-grid { display:flex; flex-wrap:wrap; gap:28px; }
+  .pill-card { flex:1 1 280px; min-width:240px; background:#fff; border:1px solid rgba(35,34,31,0.12);
+    border-radius:4px; padding:26px 28px; }
+  .pill-card h3 { margin:0 0 16px; font-size:15px; letter-spacing:0.08em; text-transform:uppercase; color: var(--ink); }
+  .pill-tags { display:flex; flex-wrap:wrap; gap:8px; }
+  .pill-tags span { font-size:12px; color: var(--muted); border:1px solid rgba(35,34,31,0.18); border-radius:999px; padding:6px 14px; }
+
+  .timeline-item { border-left:2px solid var(--accent); padding:0 0 32px 24px; max-width:620px; }
+  .timeline-item:last-child { padding-bottom:0; }
+  .timeline-item .period { font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color: var(--muted); }
+  .timeline-item h3 { margin:6px 0 4px; font-size:19px; font-weight:700; text-transform:uppercase; }
+  .timeline-item p { margin:0; font-size:14px; line-height:1.6; color: var(--muted); }
+
+  .doc-grid { display:flex; flex-wrap:wrap; gap:24px; }
+  .doc-card { flex:1 1 300px; min-width:260px; background:#fff; border:1px solid rgba(35,34,31,0.12);
+    border-radius:4px; padding:26px 28px; display:flex; flex-direction:column; gap:14px; text-decoration:none; color:inherit;
+    transition: border-color .2s ease, transform .2s ease; }
+  .doc-card:hover { border-color: var(--accent-dark); transform:translateY(-3px); }
+  .doc-tag { font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color: var(--accent-dark); font-weight:700; }
+  .doc-card h3 { margin:0; font-size:17px; font-weight:700; text-transform:uppercase; line-height:1.25; }
+  .doc-card p { margin:0; font-size:13.5px; line-height:1.6; color: var(--muted); flex:1; }
+  .doc-open { font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color: var(--ink); display:inline-flex; align-items:center; gap:8px; }
+  .doc-open::after { content:"→"; }
+
+  .contact-section { align-items:flex-start; }
+  .contact-links { display:flex; flex-wrap:wrap; gap:16px; margin-top:34px; }
+  .contact-links a.cta, .contact-links a.btn-learn { margin:0; }
+  .contact-footnote { margin-top:48px; font-size:12px; color: var(--muted); letter-spacing:0.08em; text-transform:uppercase; }
+</style>
+</head>
+<body>
+
+<section class="hero" id="hero">
+  <video class="bg-video" id="heroVideo" autoplay muted loop playsinline preload="auto"
+    src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260823_050407_500d0339-ab28-41c1-9688-132a74a3b5aa.mp4"></video>
+  <div class="stage-3d" id="stage3d"><canvas id="figureCanvas"></canvas></div>
+  <div class="scrim"></div>
+
+  <nav class="navbar">
+    <div class="logo">
+      <span class="logo-mark"><span></span></span>
+      <span class="logo-word">makhtar faye</span>
+    </div>
+    <div class="nav-links">
+      <a href="#hero">HOME</a><a href="#about">ABOUT</a><a href="#projects">PROJETS</a><a href="#contact">CONTACT</a>
+    </div>
+    <div class="nav-spacer"></div>
+    <a class="btn-contact-nav" href="mailto:mak.faye17@outlook.com">
+      <svg viewBox="0 0 17 13" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="0.7" y="0.7" width="15.6" height="11.6" rx="1.2"/><path d="M1 1.5l7.5 6L16 1.5"/></svg>
+      Contact us
+    </a>
+    <button class="burger" id="burgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#hero">Home</a><a href="#about">About</a><a href="#projects">Projets</a><a href="#contact">Contact</a>
+  </div>
+
+  <div class="headline-wrap">
+    <h1 class="staircase">
+      <div>FROM</div>
+      <div>FINANCE</div>
+      <div>TO DATA</div>
+      <div class="indent">ONE</div>
+      <div class="indent">DECISION</div>
+      <div class="indent accent">AT A TIME</div>
+    </h1>
+    <a class="cta" href="mailto:mak.faye17@outlook.com">ME CONTACTER</a>
+  </div>
+
+  <div class="scroll-cue"><span>Scroll</span><span class="line"></span></div>
+</section>
+
+<section class="about" id="about">
+  <div class="about-left">
+    <h2 class="staircase">
+      <div>ABOUT</div>
+      <div class="indent">MAKHTAR</div>
+    </h2>
+    <p class="about-text">Diplômé en finance à l'ESP Dakar (Université Cheikh Anta Diop), je m'appuie sur des bases financières solides pour évoluer vers l'analyse de données. Assistant financier junior chez Fortesa International Sénégal, j'allie rigueur chiffrée et curiosité pour ce que racontent les données.</p>
+    <a class="btn-learn" href="https://linkedin.com/in/makhtar-faye" target="_blank" rel="noreferrer">EN SAVOIR PLUS</a>
+  </div>
+  <div class="about-right">
+    <div class="about-media">
+      <video id="aboutVideo" autoplay muted loop playsinline preload="auto"
+        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260823_063501_2e2c8971-de1e-473a-8611-a0c9ae7ee186.mp4"></video>
+      <div class="about-tint"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="skills">
+  <h2 class="staircase"><div>SKILLS</div></h2>
+  <div class="pill-grid">
+    <div class="pill-card">
+      <h3>Finance & banque</h3>
+      <div class="pill-tags">
+        <span>Analyse d'états financiers</span><span>Analyse de crédit</span><span>Gestion des risques</span>
+        <span>Analyse de ratios</span><span>Institutions financières</span><span>Opérations bancaires</span>
+      </div>
+    </div>
+    <div class="pill-card">
+      <h3>Logiciels</h3>
+      <div class="pill-tags">
+        <span>Excel</span><span>Word</span><span>PowerPoint</span><span>Sage</span><span>VS Code</span><span>Python</span>
+      </div>
+    </div>
+    <div class="pill-card">
+      <h3>Savoir-être</h3>
+      <div class="pill-tags">
+        <span>Esprit analytique</span><span>Rigueur</span><span>Organisation</span>
+        <span>Travail d'équipe</span><span>Autonomie</span><span>Communication</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="experience">
+  <h2 class="staircase"><div>EXPÉRIENCE</div></h2>
+  <div class="timeline-item">
+    <span class="period">Février 2026 à aujourd'hui</span>
+    <h3>Assistant financier junior — Fortesa International Senegal</h3>
+    <p>Comptabilisation et classification des transactions, vérification des contrats, suivi des présences, préparation de la paie, transmission des documents de TVA.</p>
+  </div>
+  <div class="timeline-item">
+    <span class="period">Juillet à août 2023</span>
+    <h3>Stage — Fortesa International Senegal</h3>
+    <p>Apprentissage du Code pétrolier sénégalais, révision des procédures comptables du secteur pétrolier.</p>
+  </div>
+</section>
+
+<section class="section" id="education">
+  <h2 class="staircase"><div>FORMATION</div></h2>
+  <div class="timeline-item">
+    <span class="period">2025</span>
+    <h3>Master en Sciences Économiques et de Gestion</h3>
+    <p>Spécialisation en Gestion des Institutions Financières — Université Cheikh Anta Diop, École Supérieure Polytechnique de Dakar.</p>
+  </div>
+  <div class="timeline-item">
+    <span class="period">2023</span>
+    <h3>Licence en Sciences Économiques et de Gestion</h3>
+    <p>Majeure en Banque, Finance et Assurance — Université Cheikh Anta Diop, École Supérieure Polytechnique de Dakar.</p>
+  </div>
+</section>
+
+<section class="section" id="projects">
+  <h2 class="staircase"><div>PROJETS</div></h2>
+  <div class="doc-grid">
+    <a class="doc-card" href="documents/memoire-makhtar-faye.pdf" target="_blank" rel="noreferrer">
+      <span class="doc-tag">Mémoire</span>
+      <h3>Personnalisation client et performance commerciale</h3>
+      <p>Impact de la personnalisation client via la gestion de la relation client sur la performance commerciale chez Ecobank Sénégal (Master GIF, 2024 à 2025).</p>
+      <span class="doc-open">Ouvrir le PDF</span>
+    </a>
+    <a class="doc-card" href="documents/credit-indirect-groupe5.pdf" target="_blank" rel="noreferrer">
+      <span class="doc-tag">Projet de groupe</span>
+      <h3>Le crédit indirect</h3>
+      <p>Étude de technique bancaire sur les mécanismes du crédit indirect, réalisée en travail de groupe (Master GIF, Groupe 5).</p>
+      <span class="doc-open">Ouvrir le PDF</span>
+    </a>
+    <a class="doc-card" href="documents/digi-teranga-marketing-bancaire.pdf" target="_blank" rel="noreferrer">
+      <span class="doc-tag">Projet de groupe</span>
+      <h3>Digi Teranga : stratégie marketing bancaire</h3>
+      <p>Diagnostic concurrentiel, mix marketing 7P et plan d'action sur 12 mois pour une banque digitale sénégalaise (Master GIF).</p>
+      <span class="doc-open">Ouvrir le PDF</span>
+    </a>
+  </div>
+</section>
+
+<section class="section contact-section" id="contact">
+  <h2 class="staircase"><div>CONTACT</div></h2>
+  <p class="about-text" style="margin-left:0; max-width:560px;">Ouvert aux opportunités en finance et en analyse de données, à Dakar comme à l'international.</p>
+  <div class="contact-links">
+    <a class="cta" href="mailto:mak.faye17@outlook.com">ME CONTACTER</a>
+    <a class="btn-learn" href="cv-makhtar-faye.pdf" target="_blank" rel="noreferrer">TÉLÉCHARGER MON CV</a>
+    <a class="btn-learn" href="https://linkedin.com/in/makhtar-faye" target="_blank" rel="noreferrer">LINKEDIN</a>
+  </div>
+  <p class="contact-footnote">mak.faye17@outlook.com · Dakar, Sénégal</p>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  // ---- robust autoplay retry for both videos (per spec) ----
+  function keepAlive(video) {
+    if (!video) return;
+    const tryPlay = () => { video.muted = true; video.play().catch(() => {}); };
+    tryPlay();
+    const interval = setInterval(tryPlay, 1000);
+    document.addEventListener('click', tryPlay, { once: true });
+    document.addEventListener('touchstart', tryPlay, { once: true });
+    video.addEventListener('playing', () => clearInterval(interval), { once: true });
+  }
+  keepAlive(document.getElementById('heroVideo'));
+  keepAlive(document.getElementById('aboutVideo'));
+
+  // ---- mobile burger menu ----
+  const burger = document.getElementById('burgerBtn');
+  const menu = document.getElementById('mobileMenu');
+  burger.addEventListener('click', () => {
+    burger.classList.toggle('open');
+    menu.classList.toggle('open');
+  });
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    burger.classList.remove('open');
+    menu.classList.remove('open');
+  }));
+})();
+
+(function () {
+  const canvas = document.getElementById('figureCanvas');
+  const stage = document.getElementById('stage3d');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+  camera.position.set(0, 0.3, 7);
+
+  // muted palette matching the Mainframe screenshot: warm greys/beiges
+  const colBody = 0x8f8b82;     // blazer grey
+  const colShirt = 0xe9e5dc;    // cream shirt
+  const colHead = 0xcfc8ba;     // CRT casing beige
+  const colScreen = 0x2b2a27;   // dark screen
+  const colGlow = 0xf1ece0;     // soft eye glow
+
+  const group = new THREE.Group();
+  scene.add(group);
+
+  // torso (rounded blazer)
+  const torsoGeo = new THREE.CapsuleGeometry(1.05, 1.5, 8, 16);
+  const torsoMat = new THREE.MeshStandardMaterial({ color: colBody, roughness: 0.9, metalness: 0.02 });
+  const torso = new THREE.Mesh(torsoGeo, torsoMat);
+  torso.position.y = -1.15;
+  group.add(torso);
+
+  // shirt collar hint
+  const collarGeo = new THREE.ConeGeometry(0.5, 0.5, 4);
+  const collarMat = new THREE.MeshStandardMaterial({ color: colShirt, roughness: 0.85 });
+  const collar = new THREE.Mesh(collarGeo, collarMat);
+  collar.position.y = -0.35;
+  collar.rotation.y = Math.PI / 4;
+  group.add(collar);
+
+  // neck
+  const neckGeo = new THREE.CylinderGeometry(0.28, 0.32, 0.4, 16);
+  const neckMat = new THREE.MeshStandardMaterial({ color: colHead, roughness: 0.8 });
+  const neck = new THREE.Mesh(neckGeo, neckMat);
+  neck.position.y = 0.15;
+  group.add(neck);
+
+  // head group (the CRT monitor head) — this part tracks the mouse
+  const headGroup = new THREE.Group();
+  headGroup.position.y = 0.85;
+  group.add(headGroup);
+
+  const headGeo = new THREE.BoxGeometry(1.5, 1.3, 1.3, 2, 2, 2);
+  headGeo.translate(0, 0, 0);
+  const headMat = new THREE.MeshStandardMaterial({ color: colHead, roughness: 0.75, metalness: 0.04 });
+  const head = new THREE.Mesh(headGeo, headMat);
+  headGroup.add(head);
+
+  const screenGeo = new THREE.BoxGeometry(1.0, 0.78, 0.08);
+  const screenMat = new THREE.MeshStandardMaterial({ color: colScreen, roughness: 0.5, metalness: 0.1 });
+  const screen = new THREE.Mesh(screenGeo, screenMat);
+  screen.position.set(0, 0.05, 0.68);
+  headGroup.add(screen);
+
+  const eyeGeo = new THREE.CircleGeometry(0.12, 24);
+  const eyeMat = new THREE.MeshStandardMaterial({ color: colGlow, emissive: 0xd8cdb4, emissiveIntensity: 0.5, roughness: 0.3 });
+  const eyeL = new THREE.Mesh(eyeGeo, eyeMat);
+  eyeL.position.set(-0.22, 0.05, 0.73);
+  const eyeR = eyeL.clone();
+  eyeR.position.x = 0.22;
+  headGroup.add(eyeL, eyeR);
+
+  const knobGeo = new THREE.CylinderGeometry(0.05, 0.05, 0.04, 12);
+  const knobMat = new THREE.MeshStandardMaterial({ color: 0x4a473f, roughness: 0.6 });
+  const knob = new THREE.Mesh(knobGeo, knobMat);
+  knob.rotation.x = Math.PI / 2;
+  knob.position.set(0.55, -0.35, 0.68);
+  headGroup.add(knob);
+
+  // lights: warm neutral, soft
+  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+  const key = new THREE.DirectionalLight(0xfff3df, 0.9);
+  key.position.set(3, 4, 5);
+  scene.add(key);
+  const fill = new THREE.DirectionalLight(0xdad2c2, 0.35);
+  fill.position.set(-4, -1, 2);
+  scene.add(fill);
+
+  let targetX = 0, targetY = 0, curX = 0, curY = 0;
+  window.addEventListener('mousemove', (e) => {
+    targetX = (e.clientX / window.innerWidth) * 2 - 1;
+    targetY = (e.clientY / window.innerHeight) * 2 - 1;
+  }, { passive: true });
+
+  function resize() {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const clock = new THREE.Clock();
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
+
+    curX += (targetX - curX) * 0.06;
+    curY += (targetY - curY) * 0.06;
+
+    headGroup.rotation.y = curX * 0.5;
+    headGroup.rotation.x = -curY * 0.3;
+    group.rotation.y = curX * 0.12;
+
+    group.position.y = Math.sin(t * 1.1) * 0.06;
+
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+</script>
+</body>
+</html>
