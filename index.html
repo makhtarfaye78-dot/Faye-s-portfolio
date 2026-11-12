@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Makhtar Faye | Portfolio</title>
+<meta name="description" content="Portfolio de Makhtar Faye, assistant financier stagiaire, de la finance vers l'analyse de données / Portfolio of Makhtar Faye, financial assistant intern moving from finance to data analysis." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quantico:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #EDECE9;
+    --bg-panel: #E3E1DD;
+    --ink: #23221F;
+    --muted: #6b6862;
+    --accent: #A79C86;      /* muted warm stone, replaces the aggressive cyan */
+    --accent-dark: #8c8069;
+    --accent-hover: #b6ab95;
+  }
+  * { box-sizing: border-box; }
+  html, body { height:100%; }
+  html { scroll-snap-type: y mandatory; scroll-behavior:smooth; }
+  body { margin:0; background: var(--bg); font-family: 'Quantico', 'Arial Narrow', sans-serif; color: var(--ink); overflow-x:hidden; }
+  a { color: inherit; text-decoration:none; }
+  section.hero, section.about, section.section { scroll-snap-align:start; scroll-snap-stop:always; }
+
+  .scroll-cue { position:absolute; left:50%; bottom:28px; transform:translateX(-50%); z-index:5;
+    display:flex; flex-direction:column; align-items:center; gap:8px; color: var(--muted);
+    font-size:11px; letter-spacing:0.2em; text-transform:uppercase; }
+  .scroll-cue .line { width:1px; height:34px; background: rgba(35,34,31,0.25); position:relative; overflow:hidden; }
+  .scroll-cue .line::after { content:""; position:absolute; top:-100%; left:0; width:100%; height:100%;
+    background: var(--ink); animation: scrollDown 1.6s ease-in-out infinite; }
+  @keyframes scrollDown { 0%{ top:-100%; } 60%{ top:100%; } 100%{ top:100%; } }
+
+  .hero { position:relative; min-height:100svh; overflow:hidden; background: var(--bg); }
+
+  .bg-video { position:absolute; top:0; pointer-events:none; z-index:0; object-fit:contain; height:auto; }
+  .hero .bg-video { right:-20%; width:99%; opacity:0.9; }
+  @media (max-width:700px) { .hero .bg-video { right:auto; left:-12%; width:119%; } }
+
+  .stage-3d { position:absolute; top:0; right:-6%; width:62%; height:100%; z-index:1; }
+  .stage-3d canvas { display:block; width:100%; height:100%; }
+
+  .scrim { position:absolute; inset:0; z-index:1; pointer-events:none;
+    background: linear-gradient(90deg, var(--bg) 0%, var(--bg) 55%, rgba(237,236,233,0.85) 78%, rgba(237,236,233,0) 100%); }
+  @media (max-width:700px) { .scrim { display:none; } }
+
+  nav.navbar { position:relative; z-index:5; display:flex; flex-wrap:wrap; align-items:center; gap:clamp(20px,5vw,56px);
+    padding: clamp(20px,3vw,38px) clamp(20px,4vw,48px) 0; }
+  .logo { display:flex; align-items:center; gap:12px; }
+  .logo-mark { width:38px; height:38px; border-radius:50%; background: var(--ink); display:flex; align-items:center; justify-content:center; }
+  .logo-mark span { width:20px; height:8px; border-radius:999px; background:#fff; transform:rotate(-25deg); display:block; }
+  .logo-word { font-size:clamp(22px,5vw,30px); font-weight:400; color: var(--ink); letter-spacing:-0.5px; text-transform:lowercase; }
+  .nav-links { display:flex; gap:34px; font-weight:700; font-size:clamp(12px,2.4vw,15px); letter-spacing:0.06em; color: var(--muted); white-space:nowrap; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-spacer { flex:1; }
+  .btn-contact-nav { display:inline-flex; align-items:center; gap:10px; background:transparent; color: var(--ink); text-transform:uppercase;
+    letter-spacing:0.14em; padding:14px 26px; font-size:13px; font-weight:700; border:1px solid rgba(35,34,31,0.25);
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px)); transition: background .2s ease; }
+  .btn-contact-nav:hover { background: rgba(35,34,31,0.06); }
+  .btn-contact-nav svg { width:17px; height:13px; }
+
+  .headline-wrap { position:relative; z-index:5; padding: min(clamp(40px,9vw,120px),9vh) 20px min(clamp(24px,4vw,44px),5vh) clamp(20px,9vw,118px); }
+  h1.staircase { margin:0; text-transform:uppercase; font-weight:700; line-height:0.98; letter-spacing:0.01em;
+    font-size: min(clamp(34px,7.6vw,80px), 9.2vh); }
+  h1.staircase div { }
+  h1.staircase .indent { margin-left: min(238px, 28vw); }
+  h1.staircase .accent { color: var(--accent-dark); }
+
+  .cta { display:inline-flex; align-items:center; gap:14px; margin-top: min(clamp(36px,6vw,80px),7vh);
+    margin-left: calc(clamp(20px,9vw,118px) - clamp(20px,9vw,118px) + min(238px,28vw));
+    background: var(--accent); border:1px solid var(--accent-dark); color:#22201c; text-transform:uppercase; font-weight:700;
+    letter-spacing:0.14em; padding:18px 34px; font-size:clamp(13px,2.2vw,16px);
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+    box-shadow: 0 0 0 1px rgba(167,156,134,0.35), 0 10px 30px -12px rgba(140,128,105,0.55);
+    transition: background .2s ease, box-shadow .2s ease; }
+  .cta:hover { background: var(--accent-hover); box-shadow: 0 0 0 1px rgba(167,156,134,.5), 0 14px 34px -10px rgba(140,128,105,.7); }
+  .cta::after { content:""; display:inline-block; width:22px; height:1px; background:#22201c; }
+
+  @media (max-width: 700px) {
+    .stage-3d { right:-30%; width:100%; opacity:.9; }
+    .headline-wrap { margin-top:300px; padding:0 20px 28px 20px; }
+    h1.staircase { font-size: clamp(34px,10vw,56px); }
+    .cta { margin-left:0; }
+    .nav-links, .btn-contact-nav { display:none; }
+    .burger { display:flex; }
+  }
+
+  .burger { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:8px; z-index:6; }
+  .burger span { width:22px; height:2px; background: var(--ink); transition: transform .3s ease, opacity .3s ease; }
+  .burger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+  .burger.open span:nth-child(2) { opacity:0; }
+  .burger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+  .mobile-menu { position:fixed; inset:0; background: rgba(237,236,233,0.97); backdrop-filter: blur(6px);
+    z-index:20; display:flex; flex-direction:column; justify-content:center; gap:18px; padding:0 32px;
+    opacity:0; pointer-events:none; transition: opacity .3s ease; }
+  .mobile-menu.open { opacity:1; pointer-events:auto; }
+  .mobile-menu a { font-size:26px; font-weight:700; color: var(--ink); text-transform:uppercase; }
+
+  /* ---- About section ---- */
+  .about { position:relative; min-height:100svh; display:flex; flex-wrap:wrap; align-items:center; gap:40px;
+    background: linear-gradient(180deg, var(--bg) 0%, #F1EFEA 18%, #F1EFEA 100%);
+    padding: clamp(60px,10vw,140px) 0 clamp(30px,5vw,70px) clamp(20px,9vw,118px); }
+  .about-left { flex:1 1 420px; min-width:300px; }
+  h2.staircase { margin:0; text-transform:uppercase; font-weight:700; line-height:0.98; letter-spacing:0.01em;
+    font-size: clamp(34px,6.5vw,72px); }
+  h2.staircase .indent { margin-left: min(160px,18vw); color: var(--accent-dark); }
+  .about-text { max-width:520px; margin: 32px 0 0 min(160px,18vw); font-size:clamp(14px,1.6vw,17px);
+    line-height:1.7; color: var(--muted); }
+  .btn-learn { display:inline-flex; align-items:center; gap:14px; margin: 36px 0 0 min(160px,18vw);
+    background: var(--accent); border:1px solid var(--accent-dark); color:#22201c; text-transform:uppercase; font-weight:700;
+    letter-spacing:0.14em; padding:18px 34px; font-size:clamp(13px,2.2vw,16px);
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+    box-shadow: 0 0 0 1px rgba(167,156,134,0.35), 0 10px 30px -12px rgba(140,128,105,0.55);
+    transition: background .2s ease; }
+  .btn-learn:hover { background: var(--accent-hover); }
+  .btn-learn::after { content:""; display:inline-block; width:22px; height:1px; background:#22201c; }
+
+  .about-right { flex:1 1 360px; min-width:280px; display:flex; justify-content:flex-end; position:relative; }
+  .about-media { position:relative; width:100%; max-width:644px; }
+  .about-media video { width:100%; height:auto; display:block; }
+  .about-tint { position:absolute; inset:0; background: var(--accent); mix-blend-mode:hue; pointer-events:none; z-index:1; }
+
+  /* ---- shared section shell ---- */
+  .section { position:relative; min-height:100svh; display:flex; flex-direction:column; justify-content:center;
+    padding: clamp(60px,8vw,100px) clamp(20px,9vw,118px); background: #F1EFEA; }
+  .section:nth-of-type(even) { background: var(--bg-panel); }
+  .section h2.staircase { margin-bottom:clamp(30px,5vw,56px); }
+  .section h2.staircase .indent { margin-left:0; }
+
+  .pill-grid { display:flex; flex-wrap:wrap; gap:28px; }
+  .pill-card { flex:1 1 280px; min-width:240px; background:#fff; border:1px solid rgba(35,34,31,0.12);
+    border-radius:4px; padding:26px 28px; }
+  .pill-card h3 { margin:0 0 16px; font-size:15px; letter-spacing:0.08em; text-transform:uppercase; color: var(--ink); }
+  .pill-tags { display:flex; flex-wrap:wrap; gap:8px; }
+  .pill-tags span { font-size:12px; color: var(--muted); border:1px solid rgba(35,34,31,0.18); border-radius:999px; padding:6px 14px; }
+
+  .timeline-item { border-left:2px solid var(--accent); padding:0 0 32px 24px; max-width:620px; }
+  .timeline-item:last-child { padding-bottom:0; }
+  .timeline-item .period { font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color: var(--muted); }
+  .timeline-item h3 { margin:6px 0 4px; font-size:19px; font-weight:700; text-transform:uppercase; }
+  .timeline-item p { margin:0; font-size:14px; line-height:1.6; color: var(--muted); }
+
+  .doc-grid { display:flex; flex-wrap:wrap; gap:24px; }
+  .doc-card { flex:1 1 300px; min-width:260px; background:#fff; border:1px solid rgba(35,34,31,0.12);
+    border-radius:4px; padding:26px 28px; display:flex; flex-direction:column; gap:14px; text-decoration:none; color:inherit;
+    transition: border-color .2s ease, transform .2s ease; }
+  .doc-card:hover { border-color: var(--accent-dark); transform:translateY(-3px); }
+  .doc-tag { font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color: var(--accent-dark); font-weight:700; }
+  .doc-card h3 { margin:0; font-size:17px; font-weight:700; text-transform:uppercase; line-height:1.25; }
+  .doc-card p { margin:0; font-size:13.5px; line-height:1.6; color: var(--muted); flex:1; }
+  .doc-open { font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color: var(--ink); display:inline-flex; align-items:center; gap:8px; }
+  .doc-open::after { content:"→"; }
+
+  .contact-section { align-items:flex-start; }
+  .contact-links { display:flex; flex-wrap:wrap; gap:16px; margin-top:34px; }
+  .contact-links a.cta, .contact-links a.btn-learn { margin:0; }
+  .contact-footnote { margin-top:48px; font-size:12px; color: var(--muted); letter-spacing:0.08em; text-transform:uppercase; }
+
+  /* ---- language toggle ---- */
+  .lang-toggle { display:inline-flex; border:1px solid rgba(35,34,31,0.25); font-size:12px; font-weight:700; letter-spacing:0.12em;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)); }
+  .lang-toggle button { background:transparent; border:none; font-family:inherit; font-size:inherit; font-weight:inherit; letter-spacing:inherit;
+    color: var(--muted); padding:11px 14px; cursor:pointer; transition: background .2s ease, color .2s ease; }
+  .lang-toggle button:hover { color: var(--ink); }
+  .lang-toggle button[aria-pressed="true"] { background: var(--accent); color:#22201c; }
+  .lang-toggle button:focus-visible, .burger:focus-visible, a:focus-visible { outline:2px solid var(--accent-dark); outline-offset:2px; }
+  .mobile-menu .lang-toggle { align-self:flex-start; margin-top:12px; }
+  .mobile-menu .lang-toggle button { padding:12px 18px; font-size:14px; }
+  @media (max-width:700px) { .burger { display:flex; } }
+  @media (max-width:700px) { nav.navbar { flex-wrap:nowrap; } .lang-toggle button { padding:9px 11px; } }
+
+  /* ---- experience details ---- */
+  .timeline-item .company { display:block; font-size:13px; color: var(--accent-dark); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:10px; font-weight:700; }
+  .timeline-item.wide { max-width:760px; }
+  ul.bullets { margin:10px 0 0; padding:0 0 0 18px; font-size:14px; line-height:1.65; color: var(--muted); }
+  ul.bullets li { margin-bottom:6px; }
+  .pill-card .sub { margin:-8px 0 16px; font-size:12px; color: var(--muted); }
+  .doc-card.static { cursor:default; }
+  .doc-card.static:hover { border-color: rgba(35,34,31,0.12); transform:none; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } .scroll-cue .line::after { animation:none; } .doc-card, .btn-learn, .cta { transition:none; } }
+</style>
+</head>
+<body>
+
+<section class="hero" id="hero">
+  <video class="bg-video" id="heroVideo" autoplay muted loop playsinline preload="auto"
+    src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260823_050407_500d0339-ab28-41c1-9688-132a74a3b5aa.mp4"></video>
+  <div class="stage-3d" id="stage3d"><canvas id="figureCanvas" aria-hidden="true"></canvas></div>
+  <div class="scrim"></div>
+
+  <nav class="navbar" aria-label="Navigation">
+    <div class="logo">
+      <span class="logo-mark"><span></span></span>
+      <span class="logo-word">makhtar faye</span>
+    </div>
+    <div class="nav-links">
+      <a href="#hero" data-i18n="nav_home"></a><a href="#about" data-i18n="nav_about"></a><a href="#projects" data-i18n="nav_projects"></a><a href="#contact" data-i18n="nav_contact"></a>
+    </div>
+    <div class="nav-spacer"></div>
+    <a class="btn-contact-nav" href="mailto:mak.faye17@outlook.com">
+      <svg viewBox="0 0 17 13" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="0.7" y="0.7" width="15.6" height="11.6" rx="1.2"/><path d="M1 1.5l7.5 6L16 1.5"/></svg>
+      <span data-i18n="nav_contact_btn"></span>
+    </a>
+    <div class="lang-toggle" role="group" aria-label="Language / Langue">
+      <button type="button" data-lang="fr" aria-pressed="true">FR</button><button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+    <button class="burger" id="burgerBtn" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#hero" data-i18n="nav_home"></a><a href="#about" data-i18n="nav_about"></a><a href="#experience" data-i18n="nav_experience"></a><a href="#projects" data-i18n="nav_projects"></a><a href="#contact" data-i18n="nav_contact"></a>
+    <div class="lang-toggle" role="group" aria-label="Language / Langue">
+      <button type="button" data-lang="fr" aria-pressed="true">FR</button><button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+
+  <div class="headline-wrap">
+    <h1 class="staircase">
+      <div data-i18n="h1_1"></div>
+      <div data-i18n="h1_2"></div>
+      <div data-i18n="h1_3"></div>
+      <div class="indent" data-i18n="h1_4"></div>
+      <div class="indent" data-i18n="h1_5"></div>
+      <div class="indent accent" data-i18n="h1_6"></div>
+    </h1>
+    <a class="cta" href="mailto:mak.faye17@outlook.com" data-i18n="cta_contact"></a>
+  </div>
+
+  <div class="scroll-cue"><span>Scroll</span><span class="line"></span></div>
+</section>
+
+<section class="about" id="about">
+  <div class="about-left">
+    <h2 class="staircase">
+      <div data-i18n="about_t1"></div>
+      <div class="indent">MAKHTAR</div>
+    </h2>
+    <p class="about-text" data-i18n="about_text"></p>
+    <a class="btn-learn" href="https://linkedin.com/in/makhtar-faye" target="_blank" rel="noreferrer" data-i18n="about_btn"></a>
+  </div>
+  <div class="about-right">
+    <div class="about-media">
+      <video id="aboutVideo" autoplay muted loop playsinline preload="auto"
+        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260823_063501_2e2c8971-de1e-473a-8611-a0c9ae7ee186.mp4"></video>
+      <div class="about-tint"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="skills">
+  <h2 class="staircase"><div data-i18n="skills_title"></div></h2>
+  <div class="pill-grid">
+    <div class="pill-card">
+      <h3 data-i18n="sk1_h"></h3>
+      <p class="sub" data-i18n="sk1_sub"></p>
+      <div class="pill-tags"><span data-i18n="sk1_a"></span><span data-i18n="sk1_b"></span><span data-i18n="sk1_c"></span><span data-i18n="sk1_d"></span><span data-i18n="sk1_e"></span><span data-i18n="sk1_f"></span></div>
+    </div>
+    <div class="pill-card">
+      <h3 data-i18n="sk2_h"></h3>
+      <p class="sub" data-i18n="sk2_sub"></p>
+      <div class="pill-tags"><span data-i18n="sk2_a"></span><span data-i18n="sk2_b"></span><span data-i18n="sk2_c"></span><span data-i18n="sk2_d"></span><span data-i18n="sk2_e"></span></div>
+    </div>
+    <div class="pill-card">
+      <h3 data-i18n="sk3_h"></h3>
+      <div class="pill-tags"><span data-i18n="sk3_a"></span><span data-i18n="sk3_b"></span><span data-i18n="sk3_c"></span><span data-i18n="sk3_d"></span><span data-i18n="sk3_e"></span><span data-i18n="sk3_f"></span></div>
+    </div>
+    <div class="pill-card">
+      <h3 data-i18n="sk4_h"></h3>
+      <div class="pill-tags"><span data-i18n="sk4_a"></span><span data-i18n="sk4_b"></span><span data-i18n="sk4_c"></span></div>
+    </div>
+    <div class="pill-card">
+      <h3 data-i18n="sk5_h"></h3>
+      <div class="pill-tags"><span data-i18n="sk5_a"></span><span data-i18n="sk5_b"></span><span data-i18n="sk5_c"></span><span data-i18n="sk5_d"></span><span data-i18n="sk5_e"></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="experience">
+  <h2 class="staircase"><div data-i18n="exp_title"></div></h2>
+  <div class="timeline-item wide">
+    <span class="period" data-i18n="exp1_period"></span>
+    <h3 data-i18n="exp1_role"></h3>
+    <span class="company">Fortesa International Sénégal</span>
+    <p data-i18n="exp1_intro"></p>
+    <ul class="bullets">
+      <li data-i18n="exp1_b1"></li><li data-i18n="exp1_b2"></li><li data-i18n="exp1_b3"></li><li data-i18n="exp1_b4"></li>
+      <li data-i18n="exp1_b5"></li><li data-i18n="exp1_b6"></li><li data-i18n="exp1_b7"></li>
+    </ul>
+  </div>
+  <div class="timeline-item">
+    <span class="period" data-i18n="exp2_period"></span>
+    <h3 data-i18n="exp2_role"></h3>
+    <span class="company">Fortesa International Sénégal</span>
+    <p data-i18n="exp2_text"></p>
+  </div>
+</section>
+
+<section class="section" id="education">
+  <h2 class="staircase"><div data-i18n="edu_title"></div></h2>
+  <div class="timeline-item">
+    <span class="period">2025</span>
+    <h3 data-i18n="edu1_h"></h3>
+    <p data-i18n="edu1_p"></p>
+  </div>
+  <div class="timeline-item">
+    <span class="period">2023</span>
+    <h3 data-i18n="edu2_h"></h3>
+    <p data-i18n="edu2_p"></p>
+  </div>
+</section>
+
+<section class="section" id="projects">
+  <h2 class="staircase"><div data-i18n="proj_title"></div></h2>
+  <div class="doc-grid">
+    <a class="doc-card" href="documents/memoire-makhtar-faye.pdf" target="_blank" rel="noreferrer">
+      <span class="doc-tag" data-i18n="tag_thesis"></span>
+      <h3 data-i18n="p1_h"></h3>
+      <p data-i18n="p1_p"></p>
+      <span class="doc-open" data-i18n="open_pdf"></span>
+    </a>
+    <a class="doc-card" href="documents/credit-indirect-groupe5.pdf" target="_blank" rel="noreferrer">
+      <span class="doc-tag" data-i18n="tag_group_master"></span>
+      <h3 data-i18n="p2_h"></h3>
+      <p data-i18n="p2_p"></p>
+      <span class="doc-open" data-i18n="open_pdf"></span>
+    </a>
+    <a class="doc-card" href="documents/digi-teranga-marketing-bancaire.pdf" target="_blank" rel="noreferrer">
+      <span class="doc-tag" data-i18n="tag_group_master"></span>
+      <h3 data-i18n="p3_h"></h3>
+      <p data-i18n="p3_p"></p>
+      <span class="doc-open" data-i18n="open_pdf"></span>
+    </a>
+    <div class="doc-card static">
+      <span class="doc-tag" data-i18n="tag_group_licence"></span>
+      <h3 data-i18n="p4_h"></h3>
+      <p data-i18n="p4_p"></p>
+    </div>
+    <div class="doc-card static">
+      <span class="doc-tag" data-i18n="tag_group_licence"></span>
+      <h3 data-i18n="p5_h"></h3>
+      <p data-i18n="p5_p"></p>
+    </div>
+  </div>
+</section>
+
+<section class="section contact-section" id="contact">
+  <h2 class="staircase"><div data-i18n="contact_title"></div></h2>
+  <p class="about-text" style="margin-left:0; max-width:560px;" data-i18n="contact_text"></p>
+  <div class="contact-links">
+    <a class="cta" href="mailto:mak.faye17@outlook.com" data-i18n="cta_contact"></a>
+    <a class="btn-learn" id="cvLink" href="cv-makhtar-faye-fr.pdf" target="_blank" rel="noreferrer" data-i18n="cv_btn"></a>
+    <a class="btn-learn" href="https://linkedin.com/in/makhtar-faye" target="_blank" rel="noreferrer">LINKEDIN</a>
+  </div>
+  <p class="contact-footnote"><span>mak.faye17@outlook.com</span> · <span data-i18n="location"></span></p>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  // ---- robust autoplay retry for both videos ----
+  function keepAlive(video) {
+    if (!video) return;
+    const tryPlay = () => { video.muted = true; video.play().catch(() => {}); };
+    tryPlay();
+    const interval = setInterval(tryPlay, 1000);
+    document.addEventListener('click', tryPlay, { once: true });
+    document.addEventListener('touchstart', tryPlay, { once: true });
+    video.addEventListener('playing', () => clearInterval(interval), { once: true });
+  }
+  keepAlive(document.getElementById('heroVideo'));
+  keepAlive(document.getElementById('aboutVideo'));
+
+  // ---- mobile burger menu ----
+  const burger = document.getElementById('burgerBtn');
+  const menu = document.getElementById('mobileMenu');
+  function closeMenu() { burger.classList.remove('open'); menu.classList.remove('open'); burger.setAttribute('aria-expanded', 'false'); }
+  burger.addEventListener('click', () => {
+    const open = burger.classList.toggle('open');
+    menu.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', String(open));
+  });
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+  // ---- FR / EN language toggle ----
+  const I18N = {
+ "fr": {
+  "doc_title": "Makhtar Faye | Portfolio",
+  "nav_home": "ACCUEIL",
+  "nav_about": "À PROPOS",
+  "nav_experience": "Expérience",
+  "nav_projects": "PROJETS",
+  "nav_contact": "CONTACT",
+  "nav_contact_btn": "Me contacter",
+  "h1_1": "DE LA",
+  "h1_2": "FINANCE",
+  "h1_3": "À LA DATA",
+  "h1_4": "UNE",
+  "h1_5": "DÉCISION",
+  "h1_6": "À LA FOIS",
+  "cta_contact": "ME CONTACTER",
+  "about_t1": "À PROPOS DE",
+  "about_text": "Titulaire d'un Master en Gestion des Institutions Financières (Université Cheikh Anta Diop, ESP Dakar), je suis assistant financier stagiaire chez Fortesa International Sénégal, une entreprise pétrolière. Je vise un poste de junior financier ou d'analyste financier, avec la logique et la rigueur comme atouts, et je me forme en autodidacte à Python pour évoluer vers l'analyse de données.",
+  "about_btn": "EN SAVOIR PLUS",
+  "skills_title": "COMPÉTENCES",
+  "sk1_h": "Formation en finance et banque",
+  "sk1_sub": "Connaissances acquises en cours",
+  "sk1_a": "Analyse d'états financiers",
+  "sk1_b": "Analyse de crédit",
+  "sk1_c": "Gestion des risques",
+  "sk1_d": "Analyse de ratios",
+  "sk1_e": "Institutions financières",
+  "sk1_f": "Opérations bancaires",
+  "sk2_h": "Pratique en entreprise",
+  "sk2_sub": "Missions menées chez Fortesa",
+  "sk2_a": "Déclarations de TVA",
+  "sk2_b": "Numérisation et archivage comptable",
+  "sk2_c": "Paie des prestataires",
+  "sk2_d": "Suivi ITIE",
+  "sk2_e": "Présences et congés",
+  "sk3_h": "Outils",
+  "sk3_a": "Excel (avancé, hors macros)",
+  "sk3_b": "Sage (recherche et vérification)",
+  "sk3_c": "SYSCOHADA",
+  "sk3_d": "Python (autodidacte, scripts)",
+  "sk3_e": "Word",
+  "sk3_f": "PowerPoint",
+  "sk4_h": "Langues",
+  "sk4_a": "Français : C2",
+  "sk4_b": "Anglais : B2",
+  "sk4_c": "Wolof : courant",
+  "sk5_h": "Savoir-être",
+  "sk5_a": "Logique",
+  "sk5_b": "Rigueur",
+  "sk5_c": "Esprit analytique",
+  "sk5_d": "Organisation",
+  "sk5_e": "Travail d'équipe",
+  "exp_title": "EXPÉRIENCE",
+  "exp1_period": "Depuis le 1er février 2026",
+  "exp1_role": "Assistant financier stagiaire",
+  "exp1_intro": "Entreprise pétrolière (production, traitement, transport et commercialisation). J'assiste la personne en charge de la fiscalité pétrolière, des RH et de l'ITIE, ainsi que le comptable. Je ne réalise pas de saisie comptable.",
+  "exp1_b1": "Numérisation des factures, chèques et pièces comptables, et classement des originaux selon l'ordre d'archivage du comptable, dans le cadre de la réorganisation des archives.",
+  "exp1_b2": "TVA : reprise de la TVA de chaque opération de 2024 et 2025, et dépôt des déclarations d'avril, mai et juin auprès des impôts.",
+  "exp1_b3": "Paie des prestataires : mise à jour et contrôle des fiches de pointage ou de débours manquantes, préparation des enveloppes de 2 groupes (24 et 10 personnes), en appui au classeur Excel de mon responsable.",
+  "exp1_b4": "ITIE : contribution au classeur de la convention de novembre (15 tiers fournisseurs).",
+  "exp1_b5": "Brouillon des sommes dues à 40 prestataires.",
+  "exp1_b6": "Audit : récupération et numérisation des documents de 2018 à 2024, puis tableau Excel des totaux mensuels réalisé en 2 jours.",
+  "exp1_b7": "Pointage des présences et tenue du calendrier des congés.",
+  "exp2_period": "Juillet à août 2023",
+  "exp2_role": "Stagiaire",
+  "exp2_text": "Apprentissage du Code pétrolier sénégalais, révision des procédures comptables du secteur pétrolier.",
+  "edu_title": "FORMATION",
+  "edu1_h": "Master en Sciences Économiques et de Gestion",
+  "edu1_p": "Spécialisation en Gestion des Institutions Financières. Université Cheikh Anta Diop, École Supérieure Polytechnique de Dakar.",
+  "edu2_h": "Licence en Sciences Économiques et de Gestion",
+  "edu2_p": "Majeure en Banque, Finance et Assurance. Université Cheikh Anta Diop, École Supérieure Polytechnique de Dakar.",
+  "proj_title": "PROJETS",
+  "tag_thesis": "Mémoire",
+  "tag_group_master": "Projet de groupe, Master",
+  "tag_group_licence": "Projet de groupe, Licence",
+  "open_pdf": "Ouvrir le PDF",
+  "p1_h": "Personnalisation client et performance commerciale",
+  "p1_p": "Impact de la personnalisation client via la gestion de la relation clientèle sur les indicateurs de performance commerciale chez Ecobank. Mention Bien.",
+  "p2_h": "Le crédit indirect",
+  "p2_p": "Recherche sur les mécanismes du crédit indirect, réalisée en travail de groupe (Master GIF, Groupe 5).",
+  "p3_h": "Digi Teranga : stratégie marketing bancaire",
+  "p3_p": "Simulation d'entreprise : diagnostic concurrentiel, mix marketing 7P et plan d'action sur 12 mois pour une banque digitale sénégalaise (Master GIF).",
+  "p4_h": "Impact sur la relation client personnelle des banques",
+  "p4_p": "Étude de l'impact sur le rapport client personnel des banques, avec Ecobank comme cas. Travail de groupe de Licence.",
+  "p5_h": "Simulation de création de produit bancaire",
+  "p5_p": "Simulation de création d'un produit bancaire et élaboration de son plan marketing. Travail de groupe de Licence.",
+  "contact_title": "CONTACT",
+  "contact_text": "Ouvert aux opportunités en finance et en analyse de données, à Dakar comme à l'international.",
+  "cv_btn": "TÉLÉCHARGER MON CV",
+  "location": "Dakar, Sénégal"
+ },
+ "en": {
+  "doc_title": "Makhtar Faye | Portfolio",
+  "nav_home": "HOME",
+  "nav_about": "ABOUT",
+  "nav_experience": "Experience",
+  "nav_projects": "PROJECTS",
+  "nav_contact": "CONTACT",
+  "nav_contact_btn": "Contact me",
+  "h1_1": "FROM",
+  "h1_2": "FINANCE",
+  "h1_3": "TO DATA",
+  "h1_4": "ONE",
+  "h1_5": "DECISION",
+  "h1_6": "AT A TIME",
+  "cta_contact": "CONTACT ME",
+  "about_t1": "ABOUT",
+  "about_text": "I hold a Master's degree in Financial Institutions Management (Cheikh Anta Diop University, ESP Dakar) and work as a Financial Assistant Intern at Fortesa International Senegal, an oil company. I am targeting a junior finance or financial analyst role, with logic and rigour as my strengths, and I am teaching myself Python to move towards data analysis.",
+  "about_btn": "LEARN MORE",
+  "skills_title": "SKILLS",
+  "sk1_h": "Finance and banking education",
+  "sk1_sub": "Knowledge acquired through coursework",
+  "sk1_a": "Financial statement analysis",
+  "sk1_b": "Credit analysis",
+  "sk1_c": "Risk management",
+  "sk1_d": "Ratio analysis",
+  "sk1_e": "Financial institutions",
+  "sk1_f": "Banking operations",
+  "sk2_h": "Hands-on experience",
+  "sk2_sub": "Duties carried out at Fortesa",
+  "sk2_a": "VAT returns",
+  "sk2_b": "Accounting document scanning and archiving",
+  "sk2_c": "Contractor payroll",
+  "sk2_d": "EITI reporting",
+  "sk2_e": "Attendance and leave",
+  "sk3_h": "Tools",
+  "sk3_a": "Excel (advanced, no macros)",
+  "sk3_b": "Sage (lookups and checks)",
+  "sk3_c": "SYSCOHADA",
+  "sk3_d": "Python (self-taught, scripts)",
+  "sk3_e": "Word",
+  "sk3_f": "PowerPoint",
+  "sk4_h": "Languages",
+  "sk4_a": "French: C2",
+  "sk4_b": "English: B2",
+  "sk4_c": "Wolof: fluent",
+  "sk5_h": "Soft skills",
+  "sk5_a": "Logic",
+  "sk5_b": "Rigour",
+  "sk5_c": "Analytical mind",
+  "sk5_d": "Organisation",
+  "sk5_e": "Teamwork",
+  "exp_title": "EXPERIENCE",
+  "exp1_period": "Since 1 February 2026",
+  "exp1_role": "Financial Assistant Intern",
+  "exp1_intro": "Oil company (production, processing, transport and marketing). I assist the person in charge of petroleum taxation, HR and EITI, as well as the accountant. I do not carry out accounting entries.",
+  "exp1_b1": "Scanning invoices, cheques and accounting documents, and filing the originals in the accountant's archive order, as part of the archive reorganisation.",
+  "exp1_b2": "VAT: reviewed the VAT of every transaction for 2024 and 2025, and filed the April, May and June returns at the tax office.",
+  "exp1_b3": "Contractor payroll: updated and checked missing timesheets and expense sheets, and prepared the envelopes for 2 groups (24 and 10 people), supporting my supervisor's Excel workbook.",
+  "exp1_b4": "EITI: contributed to the November agreement workbook (15 supplier third parties).",
+  "exp1_b5": "Drafted the amounts due to 40 contractors.",
+  "exp1_b6": "Audit: retrieved and scanned the documents from 2018 to 2024, then built an Excel table of monthly totals in 2 days.",
+  "exp1_b7": "Tracking attendance and maintaining the leave calendar.",
+  "exp2_period": "July to August 2023",
+  "exp2_role": "Intern",
+  "exp2_text": "Learned the Senegalese Petroleum Code and reviewed accounting procedures in the oil sector.",
+  "edu_title": "EDUCATION",
+  "edu1_h": "Master's in Economics and Management",
+  "edu1_p": "Specialisation in Financial Institutions Management. Cheikh Anta Diop University, Polytechnic School of Dakar.",
+  "edu2_h": "Bachelor's in Economics and Management",
+  "edu2_p": "Major in Banking, Finance and Insurance. Cheikh Anta Diop University, Polytechnic School of Dakar.",
+  "proj_title": "PROJECTS",
+  "tag_thesis": "Thesis",
+  "tag_group_master": "Group project, Master's",
+  "tag_group_licence": "Group project, Bachelor's",
+  "open_pdf": "Open the PDF",
+  "p1_h": "Customer personalisation and commercial performance",
+  "p1_p": "Impact of customer personalisation through customer relationship management on commercial performance indicators at Ecobank. Graded Bien (Good).",
+  "p2_h": "Indirect credit",
+  "p2_p": "Research on how indirect credit works, carried out as a group project (Master's in Financial Institutions Management, Group 5).",
+  "p3_h": "Digi Teranga: banking marketing strategy",
+  "p3_p": "Business simulation: competitive diagnosis, 7P marketing mix and a 12-month action plan for a Senegalese digital bank (Master's in Financial Institutions Management).",
+  "p4_h": "Impact on banks' personal customer relationships",
+  "p4_p": "Study of the impact on the personal customer relationship in banks, with Ecobank as the case. Bachelor's group project.",
+  "p5_h": "Banking product creation simulation",
+  "p5_p": "Simulation of creating a banking product and drafting its marketing plan. Bachelor's group project.",
+  "contact_title": "CONTACT",
+  "contact_text": "Open to opportunities in finance and data analysis, in Dakar and internationally.",
+  "cv_btn": "DOWNLOAD MY CV",
+  "location": "Dakar, Senegal"
+ }
+};
+  function safeGet() { try { return localStorage.getItem('lang'); } catch (e) { return null; } }
+  function safeSet(v) { try { localStorage.setItem('lang', v); } catch (e) {} }
+  function setLang(lang) {
+    if (!I18N[lang]) lang = 'fr';
+    const d = I18N[lang];
+    document.documentElement.lang = lang;
+    document.title = d.doc_title;
+    const cv = document.getElementById('cvLink');
+    if (cv) cv.setAttribute('href', 'cv-makhtar-faye-' + lang + '.pdf');
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const v = d[el.getAttribute('data-i18n')];
+      if (v !== undefined) el.textContent = v;
+    });
+    document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+    safeSet(lang);
+  }
+  document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+  const saved = safeGet();
+  const initial = saved || ((navigator.language || 'fr').toLowerCase().startsWith('fr') ? 'fr' : 'en');
+  setLang(initial);
+})();
+
+(function () {
+  if (typeof THREE === 'undefined') return; // CDN unreachable: site still works without the 3D head
+  const canvas = document.getElementById('figureCanvas');
+  const stage = document.getElementById('stage3d');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+  camera.position.set(0, 0.3, 7);
+
+  // muted palette matching the Mainframe screenshot: warm greys/beiges
+  const colBody = 0x8f8b82;     // blazer grey
+  const colShirt = 0xe9e5dc;    // cream shirt
+  const colHead = 0xcfc8ba;     // CRT casing beige
+  const colScreen = 0x2b2a27;   // dark screen
+  const colGlow = 0xf1ece0;     // soft eye glow
+
+  const group = new THREE.Group();
+  scene.add(group);
+
+  // torso (rounded blazer)
+  const torsoGeo = new THREE.CapsuleGeometry(1.05, 1.5, 8, 16);
+  const torsoMat = new THREE.MeshStandardMaterial({ color: colBody, roughness: 0.9, metalness: 0.02 });
+  const torso = new THREE.Mesh(torsoGeo, torsoMat);
+  torso.position.y = -1.15;
+  group.add(torso);
+
+  // shirt collar hint
+  const collarGeo = new THREE.ConeGeometry(0.5, 0.5, 4);
+  const collarMat = new THREE.MeshStandardMaterial({ color: colShirt, roughness: 0.85 });
+  const collar = new THREE.Mesh(collarGeo, collarMat);
+  collar.position.y = -0.35;
+  collar.rotation.y = Math.PI / 4;
+  group.add(collar);
+
+  // neck
+  const neckGeo = new THREE.CylinderGeometry(0.28, 0.32, 0.4, 16);
+  const neckMat = new THREE.MeshStandardMaterial({ color: colHead, roughness: 0.8 });
+  const neck = new THREE.Mesh(neckGeo, neckMat);
+  neck.position.y = 0.15;
+  group.add(neck);
+
+  // head group (the CRT monitor head), this part tracks the mouse
+  const headGroup = new THREE.Group();
+  headGroup.position.y = 0.85;
+  group.add(headGroup);
+
+  const headGeo = new THREE.BoxGeometry(1.5, 1.3, 1.3, 2, 2, 2);
+  headGeo.translate(0, 0, 0);
+  const headMat = new THREE.MeshStandardMaterial({ color: colHead, roughness: 0.75, metalness: 0.04 });
+  const head = new THREE.Mesh(headGeo, headMat);
+  headGroup.add(head);
+
+  const screenGeo = new THREE.BoxGeometry(1.0, 0.78, 0.08);
+  const screenMat = new THREE.MeshStandardMaterial({ color: colScreen, roughness: 0.5, metalness: 0.1 });
+  const screen = new THREE.Mesh(screenGeo, screenMat);
+  screen.position.set(0, 0.05, 0.68);
+  headGroup.add(screen);
+
+  const eyeGeo = new THREE.CircleGeometry(0.12, 24);
+  const eyeMat = new THREE.MeshStandardMaterial({ color: colGlow, emissive: 0xd8cdb4, emissiveIntensity: 0.5, roughness: 0.3 });
+  const eyeL = new THREE.Mesh(eyeGeo, eyeMat);
+  eyeL.position.set(-0.22, 0.05, 0.73);
+  const eyeR = eyeL.clone();
+  eyeR.position.x = 0.22;
+  headGroup.add(eyeL, eyeR);
+
+  const knobGeo = new THREE.CylinderGeometry(0.05, 0.05, 0.04, 12);
+  const knobMat = new THREE.MeshStandardMaterial({ color: 0x4a473f, roughness: 0.6 });
+  const knob = new THREE.Mesh(knobGeo, knobMat);
+  knob.rotation.x = Math.PI / 2;
+  knob.position.set(0.55, -0.35, 0.68);
+  headGroup.add(knob);
+
+  // lights: warm neutral, soft
+  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+  const key = new THREE.DirectionalLight(0xfff3df, 0.9);
+  key.position.set(3, 4, 5);
+  scene.add(key);
+  const fill = new THREE.DirectionalLight(0xdad2c2, 0.35);
+  fill.position.set(-4, -1, 2);
+  scene.add(fill);
+
+  let targetX = 0, targetY = 0, curX = 0, curY = 0;
+  window.addEventListener('mousemove', (e) => {
+    targetX = (e.clientX / window.innerWidth) * 2 - 1;
+    targetY = (e.clientY / window.innerHeight) * 2 - 1;
+  }, { passive: true });
+
+  function resize() {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const clock = new THREE.Clock();
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
+
+    curX += (targetX - curX) * 0.06;
+    curY += (targetY - curY) * 0.06;
+
+    headGroup.rotation.y = curX * 0.5;
+    headGroup.rotation.x = -curY * 0.3;
+    group.rotation.y = curX * 0.12;
+
+    group.position.y = Math.sin(t * 1.1) * 0.06;
+
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+</script>
+</body>
+</html>
